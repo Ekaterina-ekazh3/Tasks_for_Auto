@@ -28,33 +28,26 @@ array_of_pixels = asarray(img)
 RED = [255, 0, 0]
 start_point = (0, 0)
 
-
-# list<pixels> pixels_in_component;
-# stack<pixels> neighbours;
-# neighbours.add(starting_point)
-#
-# while not neighbours.empty:
-#    p = neighbours.pop();
-#    pixels_in_component.append(p)
-#    for each adjacent pixel n of p:
-#      if color(n) == color(starting_point):
-#          neighbours.append(n)
-
-pixels_in_component = []
+array_of_coords = []
 neighbours = [start_point]
 
 while neighbours:
     p = neighbours.pop()
-    pixels_in_component.append(p)
-    for x in range(len(array_of_pixels)):
-        for y in range(len(array_of_pixels[x])):
-            if array_of_pixels[x + 1][y] == array_of_pixels[x][y] and array_of_pixels[x][y + 1] == array_of_pixels[x][
-                y]:
-                neighbours.append((x, y))
+    array_of_coords.append(p)
 
-new_array_of_pixels = list(array_of_pixels)
+    n1 = (p[0] + 1, p[1])  # сосед по вертикали
+    n2 = (p[0], p[1] + 1)  # сосед по горизонтали
 
-for coord in neighbours:
+    if n1[0] < len(array_of_pixels):
+        if list(array_of_pixels[n1[0]][n1[1]]) == list(array_of_pixels[p[0]][p[1]]):
+            neighbours.append(n1)
+    if n2[1] < len(array_of_pixels[0]):
+        if list(array_of_pixels[n2[0]][n2[1]]) == list(array_of_pixels[p[0]][p[1]]):
+            neighbours.append(n2)
+
+new_array_of_pixels = array_of_pixels.copy()
+
+for coord in array_of_coords:
     new_array_of_pixels[coord[0]][coord[1]] = RED
 
 changed_image = Image.fromarray(new_array_of_pixels)
